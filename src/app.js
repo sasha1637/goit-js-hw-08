@@ -63,3 +63,40 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+const ref = {
+  galleryList: document.querySelector('.js-gallery'),
+  modal: document.querySelector('.js-lightbox'),
+  modalImage: document.querySelector('.lightbox__image'),
+  btn: document.querySelector('.lightbox__button'),
+};
+
+const markup = galleryItems.map(({ preview, original, description })=> 
+  `<li class="gallery__item">
+      <a class="gallery__link" href=''>
+      <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/> </a> </li>`
+).join(' ');
+ref.galleryList.insertAdjacentHTML('afterbegin', markup);
+
+const onOpenModalClik = (elm => {
+    elm.preventDefault();
+  if (elm.target.localName === 'img') {
+    ref.modal.classList.add('is-open');
+    ref.modalImage.src = elm.target.dataset.source;
+    ref.modalImage.alt = elm.target.alt;
+    ref.modalImage.dataset.index = elm.target.dataset.index;
+
+  }
+});
+  
+const onCloseModalClick = elm => {
+  if (elm.target.localName !== 'img') {
+    ref.modal.classList.remove('is-open');
+    ref.modalImage.src = '';
+    ref.modalImage.alt = '';
+  }
+};
+
+  ref.galleryList.addEventListener('click', onOpenModalClik);
+  ref.btn.addEventListener('click', onCloseModalClick);
+ 
